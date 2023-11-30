@@ -9,6 +9,10 @@
             "email": "kusena322@gmail.com"
         }
     ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0"
+    },
     "license": "MIT",
     "autoload": {
         "psr-4": {
