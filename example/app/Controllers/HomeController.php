@@ -14,9 +14,12 @@ class HomeController extends Controller {
     }
 
     public function result(){
-        $data = [
-            "nama"=>"mini",
-        ];
-        $this->Response($data);
+        echo "hello world";
+        // $this->Response($data);
+    }
+    
+    public function insert(){
+        echo $_GET['id'];
+        // $this->Response($data);
     }
 }
