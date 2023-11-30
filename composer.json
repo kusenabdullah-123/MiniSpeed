@@ -1,0 +1,17 @@
+{
+    "name": "kusenadev/minispeed-framework",
+    "description": "Fastest Framework for APi php",
+    "type": "library",
+    "authors": [
+        {
+            "name": "kusenadev",
+            "email": "kusena322@gmail.com"
+        }
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "MiniSpeed\\": "src/"
+        }
+    }
+}

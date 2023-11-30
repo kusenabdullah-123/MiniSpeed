@@ -1,0 +1,10 @@
+{
+    "name": "kusenadev/minispeed-framework-examples",
+    "autoload": {
+        "psr-4": {
+            "MiniSpeed\\": "../src",
+            "App\\": "./app"
+        }
+    },
+    "require": {}
+}
