@@ -50,7 +50,6 @@ class Database {
             $values = implode(',', array_map(fn($value) => ":$value", array_keys($data)));
     
             $stmt = $this->pdo->prepare("INSERT INTO $tableName ($columns) VALUES ($values)");
-    
             foreach ($data as $key => $value) {
                 $stmt->bindValue(":$key", $value);
             }
@@ -62,7 +61,34 @@ class Database {
         }
     }
 
-    public function query(string $query){
+    public function update(string $tableName, array $data = [], array $where = [] ) : bool {
+        $tmp = [];
+        foreach ($data as $key => $value) {
+            $tmp[] = "{$key} = :{$key}";
+        }
+        $set = implode(",",$tmp);
+        $keyWhere = implode("",array_keys($where));
+        $valueWhere = (int) implode("",array_values($where));
+        $stmt = $this->pdo->prepare("UPDATE {$tableName} SET {$set} WHERE {$keyWhere} = :{$keyWhere}");
+        
+        foreach ($data as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+
+        $stmt->bindValue(":{$keyWhere}",$valueWhere);
+        return $stmt->execute();
+    }
+
+    public function delete(string $tableName, array $where = []) : bool {
+        $keyWhere = implode("",array_keys($where));
+        $valueWhere = (int) implode("",array_values($where));
+        $stmt = $this->pdo->prepare("DELETE FROM {$tableName} WHERE {$keyWhere} = :{$keyWhere}");
+        $stmt->bindValue(":{$keyWhere}",$valueWhere);
+        return $stmt->execute();
+    }
+
+
+    public function query(string $query) {
         return $this->pdo->query($query);
     }
 

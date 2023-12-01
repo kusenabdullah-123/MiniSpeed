@@ -14,7 +14,12 @@ class HomeController extends Controller {
     }
 
     public function result(){
-        echo "hello world";
+        $data = [
+            "nama"=>"n",
+        ];
+        // $this->db->insert("mini",$data);
+        // $this->db->update("mini",$data,["idMini"=>19]);
+        // $this->db->delete("mini",["idMini"=>22]);
         // $this->Response($data);
     }
     
