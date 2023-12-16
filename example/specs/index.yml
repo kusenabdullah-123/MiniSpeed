@@ -1,0 +1,25 @@
+openapi: '3.0.2'
+info:
+  title: Test MiniSpeed API
+  version: '1.0'
+
+servers:
+  - url: http://localhost:8088/
+    description: Ujian Online Dev Server
+
+tags:
+  - name: Test
+    description: Test CRUD
+
+paths:
+  /mini:
+    $ref: './paths/crud.yml'
+  /mini/{idMini}:
+    $ref: './paths/crud-{id}.yml'
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: Authorization

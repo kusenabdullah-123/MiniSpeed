@@ -44,7 +44,7 @@ class Database {
         self::$raw["select"] = "SELECT {$default}";
     }
 
-    public function insert(string $tableName, array $data = []): bool {
+    public function insert(string $tableName, array $data = []): mixed {
         try {
             $columns = implode(',', array_keys($data));
             $values = implode(',', array_map(fn($value) => ":$value", array_keys($data)));
@@ -54,7 +54,7 @@ class Database {
                 $stmt->bindValue(":$key", $value);
             }
             $stmt->execute();
-            return $this->pdo->lastInsertId();
+            return (int) $this->pdo->lastInsertId();
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
             return false;

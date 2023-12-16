@@ -1,0 +1,39 @@
+get:
+  summary: test GET ID
+  tags: [Test]
+  responses:
+    '200':
+      description: Test Get ID
+
+patch:
+  summary: test patch
+  tags: [Test]
+  parameters:
+    - in: path
+      required: true
+      name: idMini
+      schema: 
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema: 
+          type: object
+          $ref: "../schema/crud.yml"
+  responses:
+    '200':
+      description: Berhasil test Patch
+
+delete:
+  summary: Test Delete
+  tags: [Test]
+  parameters:
+    - in: path
+      required: true
+      name: idMini
+      schema: 
+        type: integer
+  responses:
+    '200' :
+      description: Berhasil Test Delete
