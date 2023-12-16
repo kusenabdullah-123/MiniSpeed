@@ -2,50 +2,47 @@
 
 namespace App\Controllers;
 use Exception;
-use MiniSpeed\Controller;
-use MiniSpeed\Database\Manager;
+use MiniSpeed\Request;
+use MiniSpeed\ResponseJson;
+use App\Model\Mini;
 
-class HomeController extends Controller {
+class HomeController {
 
-    private $db;
-    public function __construct(){
-        $this->db = Manager::get('main');
+    public function result(ResponseJson $response, Mini $Mini){
+        $data = $Mini->result("mini");
+        $response->send($data,200);
     }
 
-    public function result(){
-
-        $data = $this->db->get("mini");
-        $this->Response($data,200);
-    }
-
-    public function insert(){
+    public function insert(Request $request,ResponseJson $response, Mini $Mini){
         try {
-            $post = json_decode($this->Request()->raw(), true);
-            $lastId = $this->db->insert("mini",$post);
-            $this->Response(["id"=>$lastId],200);
+            $post = json_decode($request->raw(), true);
+            $lastId = $Mini->insert("mini",$post);
+            $response->send(["id"=>$lastId],200);
         } catch (\Throwable $e) {
-            throw new Exception(message:'mini/insert-failed',code:500);
+            throw new Exception(message:'mini/insert-failed', code:500);
         }
     }
 
-    public function update(){
+    public function update(Request $request,ResponseJson $response, Mini $Mini){
         try {
-            $id = $this->Request()->get('id');
-            $data = json_decode($this->Request()->raw(), true);
-            $success = $this->db->update('mini',$data,['idMini'=>$id]);
-            if ($success) return $this->Response(null,200);
+            $id = $request->get("id");
+            $data = json_decode($request->raw(), true);
+            $where = ["idMini" => $id];
+            $success = $Mini->update("mini", $data, $where);
+            if ($success) return $response->send(null,200);
         } catch (\Throwable $e) {
-            throw new Exception(message:'mini/insert-failed',code:500);
+            throw new Exception(message:'mini/update-failed', code:500);
         }
     }
 
-    public function delete(){
+    public function delete(Request $request,ResponseJson $response, Mini $Mini){
         try {
-            $id =  $this->Request()->get('nama');
-            $success = $this->db->delete("mini",["idMini"=>$id]);
-            if ($success) return $this->Response(null,200);
+            $id =  $request->get("id");
+            $where = ["idMini"=> $id];
+            $success = $Mini->delete("mini",$where);
+            if ($success) return $response->send(null,200);
         } catch (\Throwable $e) {
-            throw new Exception(message:'mini/insert-failed',code:500);
+            throw new Exception(message:'mini/delete-failed', code:500);
         }
 
     }

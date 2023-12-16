@@ -1,7 +1,10 @@
 <?php
 
 namespace MiniSpeed;
-use MiniSpeed\Factory;
+use MiniSpeed\ResponseJson;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType ;
 
 class Router {
     protected static array $routes = [];
@@ -49,12 +52,25 @@ class Router {
         if ($uri !== '/') Uri::trimUrl($uri);
         if (isset($matches)) {
             [$parameter,$actionControl] = $matches;
+            [$classController,$methodController] = $actionControl;
+            $reflectionMethod = new ReflectionMethod($classController, $methodController);
+            $paramMethod = $reflectionMethod->getParameters();
+            $parameteAction = [];
+            
+            foreach ($paramMethod as $param) {
+                $type = $param->getType() ? $param->getType() : null;
+                assert($type instanceof ReflectionNamedType);
+                $className = $type->getName();
+                if ($type) {
+                    $class = new ReflectionClass($className);
+                    $parameteAction[] = $class->newInstanceArgs();
+                }
+            }
             Uri::parseGetParams($parameter);
-            [$controllerClass, $action] = $actionControl;
-            $controller = Factory::create($controllerClass);
-            return $controller->$action();
+            return $reflectionMethod->invokeArgs(new $classController(), $parameteAction);
         } else {
-            return \MiniSpeed\ResponseJson::send("404 Route Not Found",404);
+            $response = new ResponseJson();
+            return $response->send("404 Route Not Found",404);
         }
     }
 }
